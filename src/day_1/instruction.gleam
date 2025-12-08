@@ -9,14 +9,8 @@ pub opaque type Instruction {
 
 pub fn new(direction: String) -> Result(Instruction, Nil) {
   case string.trim(direction) {
-    "L" <> amount_str ->
-      int.parse(amount_str)
-      |> result.map(fn(amount) { TurnLeft(amount) })
-
-    "R" <> amount_str ->
-      int.parse(amount_str)
-      |> result.map(fn(amount) { TurnRight(amount) })
-
+    "L" <> amount_str -> int.parse(amount_str) |> result.map(TurnLeft)
+    "R" <> amount_str -> int.parse(amount_str) |> result.map(TurnRight)
     _ -> Error(Nil)
   }
 }
@@ -29,7 +23,6 @@ pub fn turn_dial(
 ) -> Result(Int, Nil) {
   case direction {
     TurnLeft(amount) -> int.modulo(current_position - amount, dial_size)
-
     TurnRight(amount) -> int.modulo(current_position + amount, dial_size)
   }
 }
