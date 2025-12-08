@@ -8,7 +8,7 @@ pub fn main() -> Nil {
   let input_file = "src/day_1/input.txt" |> simplifile.read
 
   case input_file {
-    Ok(input) -> day_1.solve(input)
+    Ok(input) -> day_1.run(input)
     Error(simplifile.Enoent) -> io.println("Input file not found")
     Error(_) -> io.println("Error solving the puzzle 😵")
   }
