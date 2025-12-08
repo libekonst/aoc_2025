@@ -1,6 +1,7 @@
 import day_1/instruction
 import gleam/int
 import gleam/io
+import gleam/result
 import gleam/string
 
 const initial_dial_position = 50
@@ -27,33 +28,24 @@ fn calculate_password(
     [] -> Ok(zero_points_counter)
 
     [next_step, ..rest] -> {
-      case instruction.new(next_step) {
-        Error(_) -> Error(Nil)
-        Ok(direction) -> {
-          case
-            instruction.turn_dial(
-              towards: direction,
-              from: current_dial_position,
-            )
-          {
-            Error(_) -> Error(Nil)
-            Ok(next_position) ->
-              case next_position {
-                0 ->
-                  calculate_password(
-                    with: rest,
-                    start: next_position,
-                    counter: zero_points_counter + 1,
-                  )
-                _ ->
-                  calculate_password(
-                    with: rest,
-                    start: next_position,
-                    counter: zero_points_counter,
-                  )
-              }
-          }
-        }
+      use direction <- result.try(instruction.new(next_step))
+      use next_position <- result.try(instruction.turn_dial(
+        towards: direction,
+        from: current_dial_position,
+      ))
+      case next_position {
+        0 ->
+          calculate_password(
+            with: rest,
+            start: next_position,
+            counter: zero_points_counter + 1,
+          )
+        _ ->
+          calculate_password(
+            with: rest,
+            start: next_position,
+            counter: zero_points_counter,
+          )
       }
     }
   }
