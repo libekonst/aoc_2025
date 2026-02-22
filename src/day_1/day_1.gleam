@@ -1,4 +1,4 @@
-import day_1/instruction
+import day_1/rotate_instruction as instruction
 import gleam/int
 import gleam/io
 import gleam/result
